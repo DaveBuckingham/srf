@@ -1,0 +1,8 @@
+angle 36 
+depth 4 
+axiom [X]++[X]++[X]++[X]++[X]
+rule W=YF++ZF4-XF[-YF4-WF]++
+rule X=+YF--ZF[3-WF--XF]+
+rule Y=-WF++XF[+++YF++XF]-
+rule Z=--YF++++WF[+ZF++++XF]--XF
+rule F=

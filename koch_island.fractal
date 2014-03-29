@@ -1,0 +1,4 @@
+angle 60
+depth 3
+axiom F++F++F
+rule F=F-F++F-F

@@ -1,0 +1,4 @@
+angle 16 
+depth 4
+axiom F
+rule F=FF-[-F+F+F]+[+F-F-F]

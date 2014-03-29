@@ -1,0 +1,4 @@
+angle 25
+depth 5
+axiom F
+rule F=F[-F]F[+F]F

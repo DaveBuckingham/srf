@@ -1,0 +1,4 @@
+angle 90 
+depth 4 
+axiom F-F-F-F
+rule F=F[F]-F+F[--F]+F-F

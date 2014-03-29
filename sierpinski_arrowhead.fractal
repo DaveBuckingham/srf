@@ -1,0 +1,5 @@
+angle 60
+depth 7
+axiom XF
+rule X=YF+XF+Y
+rule Y=XF-YF-X

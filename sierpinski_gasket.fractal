@@ -1,0 +1,5 @@
+depth 6
+angle 60
+axiom F--F--F
+rule F=F--F--F--GG
+rule G=GG

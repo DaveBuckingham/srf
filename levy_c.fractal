@@ -1,0 +1,5 @@
+angle 45 
+depth 13
+axiom 4-F
+rule F=+F--F+
+linecolor 150,0,100

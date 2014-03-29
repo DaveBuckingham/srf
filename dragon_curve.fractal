@@ -1,0 +1,5 @@
+angle 45 
+depth 13
+axiom F
+rule F=[+F][+G--G4-F]
+rule G=-G++G-

@@ -1,0 +1,7 @@
+angle 30
+depth 3 
+axiom F++F++F++F++F++F
+rule F=+F--F++F-
+bgColor 40,80,40
+linecolor 150,0,100
+lineWidth 5

@@ -1,0 +1,5 @@
+angle 60
+depth 8
+axiom [FA]++[FA]++[FA]
+rule F=FF
+rule A=[-FA]+FA

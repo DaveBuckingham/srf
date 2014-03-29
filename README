@@ -1,0 +1,147 @@
+
+  ______                                  ______
+ /                                       |     /
+ |______ ______ ______ _    _ ______     |____/   ____  ______ _    _ ______
+       | |____| |_____ |____| |____|     |   \   |    | |      |___/  |_____
+ _____/  |    | _____| |    | |    |     |    \_ |____| |____  |   \_ _____|
+
+           _______
+           |
+           |______  _____ ______ ______ ______ ______       ______
+           |       |____/ |____| |        |    |____| |     |_____
+           |       |   \_ |    | |____    |    |    | |____ _____|  v.1.2
+                                                        
+                                                                              
+                                         |/ /_
+     _______________________            \|\/ 
+    /                       \            |/
+    | (1) Installation      |         \/ |     
+    |                       |         _\ | 
+    | (2) Running program   |           \|
+    |                       |            |                __/\__         
+    | (3) Custom fractals   |            |                \    /
+    \_______________________/            |          __/\__/    \__/\__         
+                                                      
+
+    -----------------------------------------------------------
+    |                    1. INSTALLATION                      |
+    -----------------------------------------------------------
+
+Srf is a Perl (www.perl.org/) program, and requires Perl to run.
+
+Also required is GD (search.cpan.org/~lds/GD-2.49/GD.pm), a graphics library
+module for Perl.
+
+Assuming Perl is installed, to automatically downoad and install GD, run:
+# perl -MCPAN -e 'install "GD"'
+or to make sure you have the necessary permisions:
+# sudo perl -MCPAN -e 'install"GD"'
+
+The Srf program, srf.pl, and related fractal configuration files are contained
+in the srf1.1.tgz tarball. To extract the program, run:
+# tar -zxvf srf1.1.tgz
+
+This will create a directy called srf1.1 containing srf.pl and the fractal
+configuration files.
+
+It may be necessary to modify the first line of srf.pl to reflect the path
+to your Perl interpreter.
+
+
+    -----------------------------------------------------------
+    |                    2. RUNNING PROGRAM                   |
+    -----------------------------------------------------------
+
+Navigate to the srf directory and run Srf with:
+# ./srf.pl
+
+A single optional paramater specifies a configuration file. E.g.:
+# ./srf.pl sierpinski_gasket.fractal
+
+The default configuration file is koch_island.fractal
+
+Srf will create a png file containing an image of the generated fractal.
+
+The default image filename is fractal_image.png
+
+After running Srf, open the generated image with your favorite image viewer.
+
+
+    -----------------------------------------------------------
+    |                    3. CUSTOM FRACTALS                   |
+    -----------------------------------------------------------
+
+Lines in a fractal configuration file consist of space-separated name-value
+pairs.
+
+Lines begining with the "#" character are ignored.
+
+An example fractal cofiguration file is:
+
+angle 60
+#depth 6
+depth 4
+axiom F--F--F
+rule F=F--F2-F2-GG
+rule G=GG
+ 
+Names and values must not contain spaces.
+
+If names (except for "rule") are repeated, only the last one will be
+effective. Any number of rules may be specified.
+
+Rules specify a transition from a single symbol to a string of symbols
+and are of the form F=S where F is a single symbol and S is a string.
+
+The axiom is a string of symbols specifying the starting condition.
+
+Beginning with the axiom, symbols are replaced according to the rules
+'depth' times and the resulting expression is input to turtle graphics.
+Rules and axioms consist of the following symbols:
+
+    'F': move forward and draw a line
+    'G': move forward without drawing a line
+    '-': turn left 'angle' degrees. may be prepended by an integer multiplier.
+    '+': turn right 'angle' degrees. may be prepended by an integer multiplier.
+    '[': push state (position and direction) onto the stack
+    ']': pop state off of the stack
+
+Other arbitrary symbols may be used. They will have no effect on turtle graphics
+but may be used in transition rules. For example, see 'penrose_tile.fractal'.
+
+All fractal configuration file specifications are optional and have default
+values. The valid specifications are:
+
+    axiom: the expression start state
+    default: 'F+F+F+F'
+           
+    angle: the angle that the turtle turns for '-' and '+' in degrees
+    default: 90
+
+    depth: how many times to apply rules i.e. the fractal recursion depth
+    default: 0
+
+    rule: transition rule of the form F=S where F is a symbol and S is a string
+          of symbols.
+    default: no rules
+
+    filename: name of output image file
+    default: 'fractal_image.png'
+
+    linewidth: width of line in pixels
+    default: 1
+
+    linecolor: color of line to draw in format 'r,g,b' where r, g, and b are 
+               integer values between 0 and 255 specifying red, green and blue
+               intensities.
+    default: 30,80,20
+
+    bgcolor: background color in format 'r,g,b'
+    default: 0,0,0
+
+    width: output image width in pixels
+    default: 1024                                         
+                                                     (O.o)
+    height: output image height in pixels            /|l|\
+    default: 768                                      / \
+
