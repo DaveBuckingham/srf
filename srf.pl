@@ -24,7 +24,7 @@ use GD::Image;
 
 
 # -----------------------------------------------------------------
-# |                 Sash Rocks Fractals v1.2                      |
+# |                          SRF v1.3                             |
 # |                           by db                               |
 # -----------------------------------------------------------------
 
@@ -32,10 +32,9 @@ use constant DEG_2_RAD => 3.141592653589793 / 180;
 
 
 # -----------------------------------------------------------------
-# |               PARSE USER PARAMS AND CONFIG FILE               |
+# |                    PARSE CONFIGURATION FILE                   |
 # -----------------------------------------------------------------
 
-# VARIABLES
 my @lineColor = (30, 80, 200);
 my @bgColor = (0, 0, 0);
 my $lineWidth = 1;
@@ -54,8 +53,9 @@ if (@ARGV) {
 
 open (FILEHANDLE, '<', $inFile) || die "can't find/open file: \"$inFile\"\n";
 while (<FILEHANDLE>) {
-    next if /^#/;
-    next if /^\s*$/;
+
+    # SKIP COMMENTS AND BLANK LINES
+    next if /^#|^\s*$/;
 
     my $line = $_;
     chomp($line);
@@ -116,13 +116,9 @@ while ($maxDepth-- > 0) {
 # |              PARSE EXPRESSION, MAKE FRACTAL LINES             |
 # -----------------------------------------------------------------
 
-# VARIABLES
 my @lines;
-my @count = $expansion =~ /F/g;
-$#lines = @count - 1;
 my ($minX, $maxX, $minY, $maxY) = (0, 0, 0, 0);
-my $index = 0;
-my $multiplier = 0;
+my $multiplier = 1;
 my %turtle = ('x' => 0, 'y' => 0, 'd' => 0);
 my @stack;
 
@@ -142,10 +138,10 @@ foreach my $op (split("", $expansion)) {
     elsif ($op eq 'F') {
 	my %old = %turtle;
 	move();
-	$lines[$index++] = [$old{x}, $old{y}, $turtle{x}, $turtle{y}];
+	push(@lines, [$old{x}, $old{y}, $turtle{x}, $turtle{y}]);
     }
     elsif ($op eq '+' || $op eq '-') {
-	$turtle{d} += "${op}$angle" * ($multiplier ? $multiplier : 1);
+	$turtle{d} += "${op}$angle" * $multiplier;
     }
     elsif ($op eq '[') {
 	my %new = %turtle;
@@ -155,18 +151,17 @@ foreach my $op (split("", $expansion)) {
 	%turtle = %{pop(@stack)};
     }
     elsif ($op =~ m/\d/) {
-	$multiplier = ($multiplier * 10) + $op;
+	$multiplier = ($multiplier == 1) ? $op : ($multiplier * 10) + $op;
     }
 
     if ($op !~ m/\d/) {
-	$multiplier = 0;
+	$multiplier = 1;
     }
 }
 
-# SCALE AND TRANSLATE LINES TO FIT CANVAS
+# SCALE LINES TO FIT CANVAS
 my $rangeX = $maxX - $minX;
 my $rangeY = $maxY - $minY;
-#my $scale = $rangeX * $width < $rangeY * $height ? ($width * 0.9) / $rangeX : ($height * 0.9) / $rangeY;
 my $scale;
 if ($rangeX / $width > $rangeY / $height) {
     $scale = $rangeX ? ($width * 0.9) / $rangeX : 1;
@@ -174,6 +169,8 @@ if ($rangeX / $width > $rangeY / $height) {
 else {
     $scale = $rangeY ? ($height * 0.9) / $rangeY : 1;
 }
+
+# TRANSLATE LINES TO FIT CANVAS
 my $shiftX = ($width - (($maxX + $minX) * $scale)) / 2;
 my $shiftY = ($height - (($maxY + $minY) * $scale)) / 2;
 for (@lines) {for (@$_) {$_ *= $scale}};
@@ -184,13 +181,12 @@ for (@lines) {$$_[0] += $shiftX; $$_[1] += $shiftY; $$_[2] += $shiftX; $$_[3] +=
 # |                        DRAW THE IMAGE                         |
 # -----------------------------------------------------------------
 
-# VARIABLES
 my $im = new GD::Image($width, $height);
-$im->interlaced('false');
 my $imLineColor =  $im->colorAllocate(@lineColor);
 my $imBackColor =  $im->colorAllocate(@bgColor);       
 
 # DRAW BACKGROUND AND LINES ONTO CANVAS
+$im->interlaced('false');
 $im->fill(0, 0, $imBackColor);
 $im->setThickness($lineWidth);
 foreach my $line (@lines) {
